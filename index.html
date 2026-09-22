@@ -1,83 +1,412 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Identidade Digital</title>
-<style>
-*{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:#f8fafc;color:#0f172a}
-.app{min-height:100vh;display:flex;flex-direction:column;max-width:520px;margin:auto;background:#f8fafc}
-header{height:64px;background:#fff;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between;padding:0 22px;position:sticky;top:0;z-index:5}
-.brand{display:flex;align-items:center;gap:9px;font-weight:800}.gov{width:27px;height:27px;background:#004a80;color:#fff;border-radius:5px;display:grid;place-items:center;font-size:9px;font-weight:900}
-.icons{display:flex;gap:15px;color:#64748b}.icon-btn{border:0;background:none;cursor:pointer;color:inherit;font-size:20px}
-main{padding:24px 22px 100px;flex:1}.hidden{display:none}.hello{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.hello h1{font-size:25px;margin:0 0 5px}.muted{color:#64748b;font-size:14px;margin:0}
-.avatar{width:50px;height:50px;border-radius:50%;object-fit:cover;border:2px solid #004a80;padding:2px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:24px}.tile{border:1px solid #e2e8f0;background:white;border-radius:18px;padding:18px 12px;min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;font-weight:800;font-size:12px;cursor:pointer;transition:.2s}.tile:hover{transform:translateY(-2px);box-shadow:0 8px 20px #0000000c}.tile .tile-icon{font-size:27px}.blue{color:#004a80}.green{color:#16a34a}.purple{color:#9333ea}.orange{color:#ea580c}
-.card{background:linear-gradient(135deg,#004a80,#00335a);color:#fff;border-radius:25px;padding:22px;box-shadow:0 15px 30px #00335a30;cursor:pointer;position:relative;overflow:hidden}.card:after{content:"";position:absolute;width:130px;height:130px;border-radius:50%;background:#fff1;right:-35px;top:-40px}.card-top{display:flex;justify-content:space-between;font-size:11px;font-weight:800;letter-spacing:1.5px;opacity:.9}.card-body{display:flex;gap:15px;align-items:flex-end;margin-top:30px}.id-photo{width:76px;height:92px;object-fit:cover;border-radius:9px;border:2px solid #ffffff55}.label{font-size:9px;text-transform:uppercase;opacity:.65;font-weight:800;margin:0 0 4px}.value{font-weight:800;margin:0 0 13px;font-size:13px}.card-bottom{border-top:1px solid #ffffff33;margin-top:20px;padding-top:13px;display:flex;justify-content:space-between;font-size:10px;opacity:.75}
-.title-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}.title-row h2{margin:0;font-size:21px}.edit{border:0;background:#eff6ff;color:#004a80;border-radius:999px;padding:8px 12px;font-weight:800;cursor:pointer}
-.document{background:#fff;border:1px solid #e2e8f0;border-radius:25px;overflow:hidden;box-shadow:0 8px 24px #0000000c}.doc-head{background:#004a80;color:#fff;padding:15px 18px;display:flex;justify-content:space-between;align-items:center;font-size:10px;font-weight:800;letter-spacing:1px}.doc-content{padding:22px}.identity{display:flex;gap:18px}.doc-photo{width:112px;height:145px;border-radius:9px;object-fit:cover;border:2px solid #e2e8f0}.fields{flex:1}.field{margin-bottom:13px}.field label{display:block;font-size:9px;color:#94a3b8;font-weight:800;text-transform:uppercase;margin-bottom:4px}.field p,.field input,.field textarea{margin:0;font-size:12px;font-weight:800;color:#1e293b;width:100%}.field input,.field textarea{border:0;border-bottom:1px solid #60a5fa;outline:none;background:transparent;padding:3px 0}.details{display:grid;grid-template-columns:1fr 1fr;gap:16px 10px;border-top:1px solid #f1f5f9;padding-top:18px;margin-top:20px}.address{border-top:1px solid #f1f5f9;margin-top:20px;padding-top:18px}.qr{background:#f8fafc;border-top:1px solid #e2e8f0;text-align:center;padding:22px}.qrbox{width:120px;height:120px;margin:auto;background:repeating-linear-gradient(45deg,#111 0 4px,#fff 4px 8px);border:10px solid white;outline:1px solid #cbd5e1;border-radius:8px}.qr p{font-size:9px;color:#94a3b8;font-weight:800;text-transform:uppercase;margin:14px 0 0}.actions{display:flex;gap:10px;margin-top:14px}.actions button{flex:1;padding:13px;border:0;border-radius:12px;font-weight:800;cursor:pointer}.download{background:#e2e8f0;color:#334155}.share{background:#004a80;color:#fff}
-.settings-list{display:flex;flex-direction:column;gap:8px}.setting{background:#fff;border:1px solid #e2e8f0;border-radius:17px;padding:15px;display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:13px}.setting span:first-child{display:flex;gap:11px;align-items:center}.logout{width:100%;margin-top:18px;border:0;background:#fef2f2;color:#dc2626;padding:15px;border-radius:17px;font-weight:800}
-nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:min(520px,100%);height:76px;background:#fff;border-top:1px solid #e2e8f0;display:flex;justify-content:space-around;align-items:center;z-index:10}nav button{border:0;background:none;color:#94a3b8;font-weight:800;font-size:10px;display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}nav button.active{color:#004a80}.back{font-size:18px;margin-right:8px}.backwrap{display:flex;align-items:center}
-.loading{position:fixed;inset:0;background:#004a80;color:white;display:grid;place-items:center;z-index:99}.loader{text-align:center}.spinner{width:60px;height:60px;border:4px solid #ffffff33;border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite;margin:auto auto 14px}@keyframes spin{to{transform:rotate(360deg)}}@media(min-width:700px){body{padding:20px 0}.app{border-radius:24px;overflow:hidden;box-shadow:0 20px 60px #0002;min-height:calc(100vh - 40px)}}
-</style>
-</head>
-<body>
-<div class="loading" id="loading"><div class="loader"><div class="spinner"></div><b>AUTENTICANDO...</b></div></div>
-<div class="app">
-<header>
-  <div class="backwrap"><button class="icon-btn back hidden" id="back" onclick="show('home')">‹</button><div class="brand"><div class="gov">GOV</div><span>gov.br</span></div></div>
-  <div class="icons"><button class="icon-btn">♧</button><button class="icon-btn" onclick="show('settings')">⚙</button></div>
-</header>
-<main>
-<section id="home">
-  <div class="hello"><div><h1>Olá, <span id="firstName">RICARDO</span></h1><p class="muted">Sua identidade digital segura</p></div><img id="avatar" class="avatar" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=256&h=256&auto=format&fit=crop"></div>
-  <div class="grid">
-    <button class="tile" onclick="show('document')"><span class="tile-icon blue">▣</span>Meus Documentos</button>
-    <button class="tile"><span class="tile-icon green">✓</span>Certificados</button>
-    <button class="tile"><span class="tile-icon purple">▤</span>Declarações</button>
-    <button class="tile"><span class="tile-icon orange">▣</span>Privacidade</button>
-  </div>
-  <div class="card" onclick="show('document')">
-    <div class="card-top"><span>▣ &nbsp; IDENTIDADE DIGITAL</span><span>⌗</span></div>
-    <div class="card-body"><img id="cardPhoto" class="id-photo" src=""><div><p class="label">Nome Completo</p><p class="value" id="cardName">RICARDO AUGUSTO SILVA</p><p class="label">CPF</p><p class="value" id="cardCpf">123.456.789-00</p></div></div>
-    <div class="card-bottom"><span>Válido até: <b id="cardValidity">10/01/2034</b></span><b>OURO</b></div>
-  </div>
-</section>
+import React, { useState, useEffect } from 'react';
+import { 
+  User, 
+  ShieldCheck, 
+  QrCode, 
+  ChevronLeft, 
+  Fingerprint, 
+  CreditCard, 
+  Settings, 
+  Bell,
+  FileText,
+  Lock,
+  Upload,
+  ArrowRight,
+  CheckCircle2
+} from 'lucide-react';
 
-<section id="document" class="hidden">
-  <div class="title-row"><h2>Documento Digital</h2><button class="edit" onclick="toggleEdit()" id="editBtn">Editar Dados</button></div>
-  <div class="document">
-    <div class="doc-head"><span>GOV &nbsp; REPÚBLICA FEDERATIVA DO BRASIL</span><span>✓</span></div>
-    <div class="doc-content">
-      <div class="identity"><div><img id="docPhoto" class="doc-photo" src=""></div><div class="fields">
-        <div class="field"><label>Nome</label><p id="nameText">RICARDO AUGUSTO SILVA</p><input id="nameInput" class="hidden" value="RICARDO AUGUSTO SILVA"></div>
-        <div class="field"><label>CPF</label><p id="cpfText">123.456.789-00</p><input id="cpfInput" class="hidden" value="123.456.789-00"></div>
-      </div></div>
-      <div class="details">
-        <div class="field"><label>Data Nasc.</label><p>15/03/1992</p></div><div class="field"><label>Gênero</label><p>MASCULINO</p></div>
-        <div class="field"><label>RG</label><p>12.345.678-X</p></div><div class="field"><label>Nacionalidade</label><p>BRASILEIRA</p></div>
+const GovIDApp = () => {
+  const [view, setView] = useState('auth'); // auth, home, profile, document, settings
+  const [isEditing, setIsEditing] = useState(false);
+  const [authStep, setAuthStep] = useState('waiting'); // waiting, scanning, success
+  
+  const [userData, setUserData] = useState(() => {
+    const savedData = localStorage.getItem('gov_id_user_data');
+    return savedData ? JSON.parse(savedData) : {
+      name: 'RICARDO AUGUSTO SILVA',
+      cpf: '123.456.789-00',
+      birthDate: '15/03/1992',
+      gender: 'MASCULINO',
+      nationality: 'BRASILEIRA',
+      issueDate: '10/01/2024',
+      validity: '10/01/2034',
+      rg: '12.345.678-X',
+      photo: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=256&h=256&auto=format&fit=crop',
+      address: 'Rua das Flores, 123, Centro, São Paulo - SP',
+      email: 'ricardo.silva@email.com',
+      phone: '(11) 98888-7777'
+    };
+  });
+
+  useEffect(() => {
+    localStorage.setItem('gov_id_user_data', JSON.stringify(userData));
+  }, [userData]);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setUserData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setUserData(prev => ({ ...prev, photo: reader.result }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleBiometricAuth = () => {
+    setAuthStep('scanning');
+    setTimeout(() => {
+      setAuthStep('success');
+      setTimeout(() => setView('home'), 800);
+    }, 1500);
+  };
+
+  if (view === 'auth') {
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-slate-100 p-4 font-sans">
+        <div className="w-full max-w-[390px] h-[844px] bg-white rounded-[48px] shadow-2xl overflow-hidden border-[8px] border-slate-900 relative flex flex-col items-center justify-center p-8 text-center">
+          <div className="w-20 h-20 bg-[#004a80] rounded-xl flex items-center justify-center text-white font-black text-2xl mb-6 shadow-lg">GOV</div>
+          <h1 className="text-xl font-bold text-slate-800 mb-2">Autenticação Necessária</h1>
+          <p className="text-slate-500 text-sm mb-12">Use sua biometria para acessar sua conta gov.br</p>
+          
+          <button 
+            onClick={handleBiometricAuth}
+            className={`relative w-24 h-24 rounded-full flex items-center justify-center transition-all duration-500 ${authStep === 'scanning' ? 'bg-blue-100 scale-110' : 'bg-slate-100 hover:bg-slate-200'} ${authStep === 'success' ? 'bg-green-100' : ''}`}
+          >
+            {authStep === 'success' ? (
+              <CheckCircle2 size={48} className="text-green-600" />
+            ) : (
+              <Fingerprint size={48} className={`${authStep === 'scanning' ? 'text-blue-600 animate-pulse' : 'text-slate-400'}`} />
+            )}
+            {authStep === 'scanning' && (
+              <div className="absolute inset-0 border-4 border-blue-500 rounded-full animate-ping opacity-50"></div>
+            )}
+          </button>
+          <p className="mt-6 text-xs font-bold text-slate-400 uppercase tracking-widest">
+            {authStep === 'waiting' && 'Toque no sensor'}
+            {authStep === 'scanning' && 'Lendo digital...'}
+            {authStep === 'success' && 'Acesso Permitido'}
+          </p>
+        </div>
       </div>
-      <div class="address"><div class="field"><label>Endereço</label><p id="addressText">Rua das Flores, 123, Centro, São Paulo - SP</p><textarea id="addressInput" class="hidden">Rua das Flores, 123, Centro, São Paulo - SP</textarea></div></div>
-    </div>
-    <div class="qr"><div class="qrbox"></div><p>Validação via QR Code</p></div>
-  </div>
-  <div class="actions"><button class="download" onclick="alert('PDF demonstrativo pronto para download.')">Baixar PDF</button><button class="share" onclick="navigator.share ? navigator.share({title:'Identidade Digital',text:'Documento Digital'}) : alert('Documento pronto para compartilhar.')">Compartilhar</button></div>
+    );
+  }
+
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-slate-200 p-4 font-sans">
+      <div className="w-full max-w-[390px] h-[844px] bg-slate-50 rounded-[48px] shadow-2xl overflow-hidden border-[8px] border-slate-900 relative flex flex-col">
+        
+        <div className="h-11 px-8 flex justify-between items-center text-xs font-bold text-slate-800">
+          <span>9:41</span>
+          <div className="flex gap-1.5 items-center">
+            <div className="w-4 h-4 bg-slate-800 rounded-full flex items-center justify-center text-[8px] text-white">5G</div>
+            <div className="w-6 h-3 border border-slate-800 rounded-sm relative">
+              <div className="absolute left-0 top-0 h-full bg-slate-800 w-3/4"></div>
+            </div>
+          </div>
+        </div>
+
+        <header className="px-6 py-4 flex justify-between items-center bg-white border-b border-slate-100">
+          <div className="flex items-center gap-2">
+            {view !== 'home' && (
+              <button onClick={() => setView('home')} className="p-1 hover:bg-slate-100 rounded-full transition-colors">
+                <ChevronLeft size={20} className="text-slate-600" />
+              </button>
+            )}
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 bg-[#004a80] rounded-sm flex items-center justify-center text-white font-black text-[10px]">GOV</div>
+              <span className="font-bold text-slate-800 text-sm tracking-tight">gov.br</span>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <Bell size={20} className="text-slate-400 cursor-pointer" />
+            <Settings size={20} className="text-slate-400 cursor-pointer" onClick={() => setView('settings')} />
+          </div>
+        </header>
+
+        <main className="flex-1 overflow-y-auto pb-20">
+          {view === 'home' && (
+            <div className="p-6 space-y-6">
+              <section className="flex items-center justify-between">
+                <div>
+                  <h1 className="text-2xl font-bold text-slate-900">Olá, {userData.name.split(' ')[0]}</h1>
+                  <p className="text-slate-500 text-sm">Sua identidade digital segura</p>
+                </div>
+                <div className="w-12 h-12 rounded-full border-2 border-[#004a80] p-0.5">
+                  <img src={userData.photo} alt="Profile" className="w-full h-full rounded our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our our```jsx
+<div className="w-12 h-12 rounded-full border-2 border-[#004a80] p-0.5">
+<img src={userData.photo} alt="Profile" className="w-full h-full rounded-full object-cover" />
+</div>
 </section>
 
-<section id="settings" class="hidden">
-  <div class="title-row"><h2>Configurações</h2></div>
-  <div class="settings-list">
-    <div class="setting"><span>👤 Dados da Conta</span><b>›</b></div><div class="setting"><span>🔒 Segurança e Senha</span><b>›</b></div><div class="setting"><span>◉ Biometria</span><b>›</b></div><div class="setting"><span>🔔 Notificações</span><b>›</b></div>
-  </div><button class="logout" onclick="alert('Sessão encerrada no modo demonstrativo.')">Sair da Conta</button>
+<section className="grid grid-cols-2 gap-4">
+<button onClick={() => setView('document')} className="p-4 bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center gap-3 hover:bg-slate-50 transition-all active:scale-95">
+<div className="p-3 bg-blue-50 text-[#004a80] rounded-xl"><CreditCard size={24} /></div>
+<span className="text-xs font-bold text-slate-700">Meus Documentos</span>
+</button>
+<button className="p-4 bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center gap-3 hover:bg-slate-50 transition-all active:scale-95">
+<div className="p-3 bg-green-50 text-green-600 rounded-xl"><ShieldCheck size={24} /></div>
+<span className="text-xs font-bold text-slate-700">Certificados</span>
+</button>
+<button className="p-4 bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center gap-3 hover:bg-slate-50 transition-all active:scale-95">
+<div className="p-3 bg-purple-50 text-purple-600 rounded-xl"><FileText size={24} /></div>
+<span className="text-xs font-bold text-slate-700">Declarações</span>
+</button>
+<button className="p-4 bg-white rounded-2xl shadow-sm border border-slate-100 flex flex-col items-center text-center gap-3 hover:bg-slate-50 transition-all active:scale-95">
+<div className="p-3 bg-orange-50 text-orange-600 rounded-xl"><Lock size={24} /></div>
+<span className="text-xs font-bold text-slate-700">Privacidade</span>
+</button>
 </section>
-</main>
-<nav><button id="navHome" onclick="show('home')"><span>⌂</span>Início</button><button id="navDoc" onclick="show('document')"><span>▣</span>Documentos</button><button id="navSet" onclick="show('settings')"><span>⚙</span>Ajustes</button></nav>
+
+<section className="bg-gradient-to-br from-[#004a80] to-[#00335a] rounded-3xl p-6 text-white shadow-xl relative overflow-hidden group cursor-pointer" onClick={() => setView('document')}>
+<div className="absolute -right-8 -top-8 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+<div className="flex justify-between items-start mb-8">
+<div className="flex items-center gap-2">
+<div className="w-5 h-5 bg-white rounded-sm flex items-center justify-center text-[#004a80] font-black text-[8px]">GOV</div>
+<span className="text-[10px] font-bold uppercase tracking-widest opacity-80">Identidade Digital</span>
 </div>
-<script>
-const sections=['home','document','settings'];
-function show(id){sections.forEach(x=>document.getElementById(x).classList.toggle('hidden',x!==id));document.getElementById('back').classList.toggle('hidden',id==='home');['navHome','navDoc','navSet'].forEach(x=>document.getElementById(x).classList.remove('active'));document.getElementById(id==='home'?'navHome':id==='document'?'navDoc':'navSet').classList.add('active');scrollTo(0,0)}
-function toggleEdit(){const editing=document.getElementById('nameInput').classList.contains('hidden');['nameInput','cpfInput','addressInput'].forEach(x=>document.getElementById(x).classList.toggle('hidden',!editing));['nameText','cpfText','addressText'].forEach(x=>document.getElementById(x).classList.toggle('hidden',editing));document.getElementById('editBtn').textContent=editing?'Salvar':'Editar Dados';if(!editing){document.getElementById('nameText').textContent=document.getElementById('nameInput').value;document.getElementById('cpfText').textContent=document.getElementById('cpfInput').value;document.getElementById('addressText').textContent=document.getElementById('addressInput').value;document.getElementById('cardName').textContent=document.getElementById('nameInput').value;document.getElementById('cardCpf').textContent=document.getElementById('cpfInput').value;document.getElementById('firstName').textContent=document.getElementById('nameInput').value.split(' ')[0]}}
-const photo='https://images.unsplash.com/photo-1500648767791-00dcc994a43e?q=80&w=256&h=256&auto=format&fit=crop';document.getElementById('cardPhoto').src=photo;document.getElementById('docPhoto').src=photo;
-setTimeout(()=>document.getElementById('loading').remove(),900);
-</script>
-</body></html>
+<QrCode size={24} className="opacity-60" />
+</div>
+<div className="flex gap-4 items-end">
+<img src={userData.photo} alt="ID" className="w-20 h-24 rounded-lg object-cover border-2 border-white/30 shadow-lg" />
+<div className="flex-1 mb-1">
+<p className="text-[10px] uppercase opacity-60 font-bold mb-1">Nome Completo</p>
+<p className="text-sm font-bold leading-tight mb-3">{userData.name}</p>
+<p className="text-[10px] uppercase opacity-60 font-bold mb-1">CPF</p>
+<p className="text-sm font-mono font-bold">{userData.cpf}</p>
+</div>
+</div>
+<div className="mt-6 pt-4 border-t border-white/20 flex justify-between items-center">
+<span className="text-[10px] font-medium opacity-70">Válido até: {userData.validity}</span>
+<span className="text-[10px] bg-white/20 px-2 py-1 rounded-full font-bold uppercase">Ouro</span>
+</div>
+</section>
+</div>
+)}
+
+{view === 'document' && (
+<div className="p-6 space-y-6">
+<div className="flex justify-between items-center">
+<h2 className="text-xl font-bold text-slate-900">Documento Digital</h2>
+<button
+onClick={() => setIsEditing(!isEditing)}
+className="text-xs font-bold text-[#004a80] bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100 transition-colors"
+>
+{isEditing? 'Salvar': 'Editar Dados'}
+</button>
+</div>
+
+<div className="bg-white rounded-3xl shadow-lg border border-slate-200 overflow-hidden">
+<div className="bg-[#004a80] p-4 flex justify-between items-center text-white">
+<div className="flex items-center gap-2">
+<div className="w-5 h-5 bg-white rounded-sm flex items-center justify-center text-[#004a80] font-black text-[8px]">GOV</div>
+<span className="text-[10px] font-bold uppercase tracking-widest">República Federativa do Brasil</span>
+</div>
+<ShieldCheck size={18} />
+</div>
+
+<div className="p-6 space-y-6">
+<div className="flex gap-6">
+<div className="relative">
+<div className="w-28 h-36 bg-slate-100 rounded-lg overflow-hidden border-2 border-slate-200 shadow-inner">
+<img src={userData.photo} alt="ID" className="w-full h-full object-cover" />
+</div>
+{isEditing && (
+<label className="absolute -bottom-2 -right-2 p-1 bg-blue-600 rounded-full shadow-md border border-white cursor-pointer hover:bg-blue-700 transition-colors">
+<Upload size={14} className="text-white" />
+<input type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
+</label>
+)}
+</div>
+<div className="flex-1 space-y-3">
+<div className="space-y-1">
+<label className="text-[10px] font-bold text-slate-400 uppercase">Nome</label>
+{isEditing? (
+<input name="name" value={userData.name} onChange={handleInputChange} className="w-full text-sm font-bold text-slate-800 border-b border-blue-400 focus:outline-none bg-transparent" />
+): (
+<p className="text-sm font-bold text-slate-800 leading-tight">{userData.name}</p>
+)}
+</div>
+<div className="space-y-1">
+<label className="text-[10px] font-bold text-slate-400 uppercase">CPF</label>
+{isEditing? (
+<input name="cpf" value={userData.cpf} onChange={handleInputChange} className="w-full text-sm font-mono font-bold text-slate-800 border-b border-blue-400 focus:outline-none bg-transparent" />
+): (
+<p className="text-sm font-mono font-bold text-slate-800">{userData.cpf}</p>
+)}
+</div>
+</div>
+</div>
+
+<div className="grid grid-cols-2 gap-y-4 gap-x-2 pt-4 border-t border-slate-100">
+<div className="space-y-1">
+<label className="text-[10px] font-bold text-slate-400 uppercase">Data Nasc.</label>
+{isEditing? (
+<input name="birthDate" value={userData.birthDate} onChange={handleInputChange} className="w-full text-xs font-bold text-slate-800 border-b border-blue-400 focus:outline-none bg-transparent" />
+): (
+<p className="text-xs font-bold text-slate-800">{userData.birthDate}</p>
+)}
+</div>
+<div className="space-y-1">
+<label className="text-[10px] font-bold text-slate-400 uppercase">Gênero</label>
+{isEditing? (
+<input name="gender" value={userData.gender} onChange={handleInputChange} className="w-full text-xs font-bold text-slate-800 border-b border-blue-400 focus:outline-none bg-transparent" />
+): (
+<p className="text-xs font-bold text-slate-800">{userData.gender}</p>
+)}
+</div>
+<div className="space-y-1">
+<label className="text-[10px] font-bold text-slate-400 uppercase">RG</label>
+{isEditing? (
+<input name="rg" value={userData.rg} onChange={handleInputChange} className="w-full text-xs font-bold text-slate-800 border-b border-blue-400 focus:outline-none bg-transparent" />
+): (
+<p className="text-xs font-bold text-slate-800">{userData.rg}</p>
+)}
+</div>
+<div className="space-y-1">
+<label className="text-[10px] font-bold text-slate-400 uppercase">Nacionalidade</label>
+{isEditing? (
+<input name="nationality" value={userData.nationality} onChange={handleInputChange} className="w-full text-xs font-bold text-slate-800 border-b border-blue-400 focus:outline-none bg-transparent" />
+): (
+<p className="text-xs font-bold text-slate-800">{userData.nationality}</p>
+)}
+</div>
+</div>
+
+<div className="pt-4 border-t border-slate-100 space-y-1">
+<label className="text-[10px] font-bold text-slate-400 uppercase">Endereço</label>
+{isEditing? (
+<textarea name="address" value={userData.address} onChange={handleInputChange} className="w-full text-xs font-bold text-slate-800 border-b border-blue-400 focus:outline-none bg-transparent resize-none" />
+): (
+<p className="text-xs font-bold text-slate-800 leading-relaxed">{userData.address}</p>
+)}
+</div>
+</div>
+
+<div className="bg-slate-50 p-6 flex flex-col items-center justify-center border-t border-slate-100">
+<div className="p-2 bg-white border border-slate-200 rounded-xl shadow-sm mb-3">
+<QrCode size={120} className="text-slate-800" />
+</div>
+<p className="text-[10px] font-bold text-slate-400 uppercase tracking-tighter">Validação via QR Code</p>
+</div>
+</div>
+
+<div className="flex gap-3">
+<button className="flex-1 py-3 bg-slate-200 text-slate-700 rounded-xl text-xs font-bold hover:bg-slate-300 transition-colors">Baixar PDF</button>
+<button className="flex-1 py-3 bg-[#004a80] text-white rounded-xl text-xs font-bold hover:bg-[#00335a] transition-colors shadow-lg shadow-blue-900/20">Compartilhar</button>
+</div>
+</div>
+)}
+
+{view === 'profile' && (
+<div className="p-6 space-y-6">
+<div className="flex justify-between items-center">
+<h2 className="text-xl font-bold text-slate-900">Dados da Conta</h2>
+<button
+onClick={() => setIsEditing(!isEditing)}
+className="text-xs font-bold text-[#004a80] bg-blue-50 px-3 py-1.5 rounded-full hover:bg-blue-100 transition-colors"
+>
+{isEditing? 'Salvar': 'Editar'}
+</button>
+</div>
+
+<div className="bg-white rounded-3xl shadow-sm border border-slate-200 p-6 space-y-6">
+<div className="flex flex-col items-center gap-4 mb-6">
+<div className="relative">
+<img src={userData.photo} alt="Profile" className="w-24 h-24 rounded-full object-cover border-4 border-slate-100" />
+{isEditing && (
+<label className="absolute bottom-0 right-0 p-2 bg-blue-600 rounded-full shadow-md border border-white cursor-pointer hover:bg-blue-700 transition-colors">
+<Camera size={16} className="text-white" />
+<input type="file" accept="image/*" className="hidden" onChange={handlePhotoChange} />
+</label>
+)}
+</div>
+<div className="text-center">
+<p className="font-bold text-slate-800">{userData.name}</p>
+<p className="text-xs text-slate-500">Nível Prata</p>
+</div>
+</div>
+
+<div className="space-y-4">
+<div className="space-y-1">
+<label className="text-[10px] font-bold text-slate-400 uppercase">E-mail</label>
+{isEditing? (
+<input name="email" value={userData.email} onChange={handleInputChange} className="w-full text-sm font-medium text-slate-800 border-b border-blue-400 focus:outline-none bg-transparent" />
+): (
+<p className="text-sm font-medium text-slate-800">{userData.email}</p>
+)}
+</div>
+<div className="space-y-1">
+<label className="text-[10px] font-bold text-slate-400 uppercase">Telefone</label>
+{isEditing? (
+<input name="phone" value={userData.phone} onChange={handleInputChange} className="w-full text-sm font-medium text-slate-800 border-b border-blue-400 focus:outline-none bg-transparent" />
+): (
+<p className="text-sm font-medium text-slate-800">{userData.phone}</p>
+)}
+</div>
+<div className="space-y-1">
+<label className="text-[10px] font-bold text-slate-400 uppercase">CPF</label>
+{isEditing? (
+<input name="cpf" value={userData.cpf} onChange={handleInputChange} className="w-full text-sm font-medium text-slate-800 border-b border-blue-400 focus:outline-none bg-transparent" />
+): (
+<p className="text-sm font-medium text-slate-800">{userData.cpf}</p>
+)}
+</div>
+</div>
+</div>
+</div>
+)}
+
+{view === 'settings' && (
+<div className="p-6 space-y-6">
+<h2 className="text-xl font-bold text-slate-900">Configurações</h2>
+<div className="space-y-2">
+{[
+{ icon: User, label: 'Dados da Conta', color: 'text-blue-500', action: () => setView('profile') },
+{ icon: Lock, label: 'Segurança e Senha', color: 'text-green-500', action: () => {} },
+{ icon: Fingerprint, label: 'Biometria', color: 'text-purple-500', action: () => {} },
+{ icon: Bell, label: 'Notificações', color: 'text-orange-500', action: () => {} },
+].map((item, idx) => (
+<div
+key={idx}
+onClick={item.action}
+className="flex items-center justify-between p-4 bg-white rounded-2xl border border-slate-100 cursor-pointer hover:bg-slate-50 transition-colors"
+>
+<div className="flex items-center gap-3">
+<div className={`p-2 rounded-lg bg-slate-50 ${item.color}`}><item.icon size={20} /></div>
+<span className="text-sm font-bold text-slate-700">{item.label}</span>
+</div>
+<ChevronLeft size={18} className="text-slate-300 rotate-180" />
+</div>
+))}
+</div>
+<button
+onClick={() => {
+localStorage.removeItem('gov_id_user_data');
+window.location.reload();
+}}
+className="w-full py-4 bg-red-50 text-red-600 rounded-2xl text-sm font-bold hover:bg-red-100 transition-colors"
+>
+Resetar Todos os Dados
+</button>
+</div>
+)}
+</main>
+
+<nav className="absolute bottom-0 left-0 right-0 h-20 bg-white border-t border-slate-100 px-8 flex justify-between items-center">
+<button onClick={() => setView('home')} className={`flex flex-col items-center gap-1 transition-colors ${view === 'home' ? 'text-[#004a80]' : 'text-slate-400'}`}><User size={22} /><span className="text-[10px] font-bold">Início</span></button>
+<button onClick={() => setView('document')} className={`flex flex-col items-center gap-1 transition-colors ${view === 'document' ? 'text-[#004a80]' : 'text-slate-400'}`}><CreditCard size={22} /><span className="text-[10px] font-bold">Documentos</span></button>
+<button onClick={() => setView('settings')} className={`flex flex-col items-center gap-1 transition-colors ${view === 'settings' ? 'text-[#004a80]' : 'text-slate-400'}`}><Settings size={22} /><span className="text-[10px] font-bold">Ajustes</span></button>
+</nav>
+<div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-slate-200 rounded-full"></div>
+</div>
+</div>
+);
+};
+
+export default GovIDApp;
